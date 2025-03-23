@@ -4,27 +4,13 @@ import pickle
 import requests
 import pandas as pd 
 
-import requests
-
 def fetch_poster(movie_id):
-    try:
-        url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key=YOUR_API_KEY&language=en-US"
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an error for bad responses (4xx, 5xx)
-
-        data = response.json()
-
-        # Check if 'poster_path' is in response
-        if "poster_path" in data and data["poster_path"]:
-            full_path = f"https://image.tmdb.org/t/p/w500{data['poster_path']}"
-            return full_path
-        else:
-            print(f"Poster not found for Movie ID: {movie_id}")
-            return "https://via.placeholder.com/500x750?text=No+Image+Available"
-
-    except requests.exceptions.RequestException as e:
-        print(f"API request failed: {e}")
-        return "https://via.placeholder.com/500x750?text=Error+Fetching+Image"
+    url = "https://api.themoviedb.org/3/movie/{}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US".format(movie_id)
+    data = requests.get(url)
+    data = data.json()
+    poster_path = data['poster_path']
+    full_path = "https://image.tmdb.org/t/p/w500/" + poster_path
+    return full_path
 
 def recommend(movie):
     index = movies[movies['title'] == movie].index[0]
